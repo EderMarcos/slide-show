@@ -4,18 +4,60 @@
 	<meta charset="UTF-8">
 	<title>Slideshow</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				Hello world!
-			</div>
+	<div class="row no-margin ">
+		<div class="col-xs-12" id="slide">
+			<ul class="no-padding">
+				<li>
+					<img src="images/slide01.jpg">
+					<div class="textoSlide">
+						<h1>Lorem Ipsum</h1>
+						<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+					</div>
+				</li>
+
+				<li>
+					<img src="images/slide02.jpg">
+					<div class="textoSlide">
+						<h1>Lorem Ipsum</h1>
+						<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+					</div>
+				</li>
+
+				<li>
+					<img src="images/slide03.jpg">
+					<div class="textoSlide">
+						<h1>Lorem Ipsum</h1>
+						<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+					</div>
+				</li>
+
+				<li>
+					<img src="images/slide04.jpg">
+					<div class="textoSlide">
+						<h1>Lorem Ipsum</h1>
+						<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+					</div>
+				</li>
+			</ul>
+			<ol id="pagination">
+				<li item="1"><span class="fa fa-circle"></span></li>
+				<li item="2"><span class="fa fa-circle"></span></li>
+				<li item="3"><span class="fa fa-circle"></span></li>
+				<li item="4"><span class="fa fa-circle"></span></li>
+			</ol>
+
+			<div class="flechas" id="retroceder"><span class="fa fa-chevron-left"></span></div>
+			<div class="flechas" id="avanzar"><span class="fa fa-chevron-right"></span></div>
 		</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
 </body>
 </html>
