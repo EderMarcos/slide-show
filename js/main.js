@@ -1,60 +1,85 @@
-var properties = {
+var attri = {
 	pagination: document.querySelectorAll("#pagination li"),
 	container: document.querySelector("#slide ul"),
-    currentPosition: 0,
-	leftArrow: document.querySelector("#retroceder"),
-	rightArrow: document.querySelector("#avanzar")
+    pos: 0,
+    interval: 0,
+    items: document.querySelectorAll("#slide ul li"),
+	back: document.querySelector("#retroceder"),
+	next: document.querySelector("#avanzar")
 };
 
 var methods = {
 	startSlide: function () {
-		for (var i = 0; i < properties.pagination.length; i++) {
-			properties.pagination[i].addEventListener("click", methods.animation)
+		for (var i = 0; i < attri.pagination.length; i++) {
+			attri.pagination[i].addEventListener("click", methods.pagination)
 		}
-		properties.leftArrow.addEventListener("click", methods.backPage);
-		properties.rightArrow.addEventListener("click", methods.nextPage);
+		attri.next.addEventListener("click", methods.nextPage);
+		attri.back.addEventListener("click", methods.backPage);
+		methods.interval();
 	},
-	animation: function (item) {
-        properties.currentPosition = item.target.parentNode.getAttribute("item") - 1;
-		properties.container.style.left = - properties.currentPosition * 100 + "%";
-        methods.resetPagination();
-        methods.setPaginationIndicator(properties.currentPosition)
+	pagination: function (item) {
+        methods.resetInterval();
+        attri.pos = item.target.parentNode.getAttribute("item") - 1;
+		attri.container.style.left = - attri.pos * 100 + "%";
+        methods.setPaginationIndicator(attri.pos);
+        attri.container.style.transition = ".7s left ease-in-out";
     },
     nextPage: function () {
-        if (properties.container.style.left === "" || properties.container.style.left === "0%") {
-            properties.container.style.left = "-100%";
-            methods.resetPagination();
-            methods.setPaginationIndicator(1);
-        } else if (properties.container.style.left === "-300%") {
-            properties.container.style.left = "";
-            methods.resetPagination();
-            methods.setPaginationIndicator(0);
+        methods.resetInterval();
+
+	    if (attri.pos === attri.items.length - 1) {
+	        attri.pos = 0;
         } else {
-            var idx = properties.container.style.left.split("%")[0];
-            properties.container.style.left = (idx - 100) + "%";
-            methods.resetPagination();
-            methods.setPaginationIndicator((properties.container.style.left.split("-")[1].replace("%", "")) / 100);
+            attri.pos ++;
         }
+
+        attri.container.style.left = attri.pos * -100 + '%';
+        methods.setPaginationIndicator(attri.pos);
+        attri.container.style.transition = ".7s left ease-in-out";
     },
     backPage: function () {
-        if (properties.container.style.left === "" || properties.container.style.left === "0%") {
-            properties.container.style.left = "-300%";
-            methods.resetPagination();
-            methods.setPaginationIndicator(3);
+        methods.resetInterval();
+
+        if (attri.pos === 0) {
+            attri.pos = attri.items.length - 1;
         } else {
-            var idx = properties.container.style.left.split("%")[0];
-            properties.container.style.left = (parseInt(idx) + 100) + "%";
-            methods.resetPagination();
-            methods.setPaginationIndicator(parseInt(properties.container.style.left.split("%")[0].replace("-", "")) / 100);
+            attri.pos --;
         }
+
+        attri.container.style.left = attri.pos * -100 + '%';
+        methods.setPaginationIndicator(attri.pos);
+        attri.container.style.transition = ".7s left ease-in-out";
+    },
+    interval: function () {
+        attri.interval = setInterval(function() {
+            if (attri.pos === attri.items.length - 1) {
+                attri.pos = 0;
+            } else {
+                attri.pos ++;
+            }
+
+            attri.container.style.left = attri.pos * -100 + '%';
+            methods.setPaginationIndicator(attri.pos);
+            attri.container.style.transition = ".7s left ease-in-out";
+        }, 3000)
+    },
+    resetInterval: function () {
+        clearInterval(attri.interval);
+
+        setTimeout(function () {
+           methods.interval()
+        }, 10000);
     },
     resetPagination: function () {
-        for (var i = 0; i < properties.pagination.length; i++) {
-            properties.pagination[i].style.opacity = '0.5';
+        for (var i = 0; i < attri.pagination.length; i++) {
+            attri.pagination[i].style.opacity = '0.5';
+            attri.pagination[i].style.transition = ".7s opacity ease-in-out";
         }
     },
     setPaginationIndicator: function (index) {
-        properties.pagination[index].style.opacity = '1';
+        methods.resetPagination();
+        attri.pagination[index].style.opacity = '1';
+        attri.pagination[index].style.transition = ".7s opacity ease-in-out";
     }
 };
 
