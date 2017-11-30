@@ -1,86 +1,150 @@
-var attri = {
+var Slide = {
+    /**
+     * Atributos
+     * */
 	pagination: document.querySelectorAll("#pagination li"),
 	container: document.querySelector("#slide ul"),
     pos: 0,
-    interval: 0,
+    intervalName: 0,
     items: document.querySelectorAll("#slide ul li"),
 	back: document.querySelector("#retroceder"),
-	next: document.querySelector("#avanzar")
-};
+	next: document.querySelector("#avanzar"),
 
-var methods = {
-	startSlide: function () {
-		for (var i = 0; i < attri.pagination.length; i++) {
-			attri.pagination[i].addEventListener("click", methods.pagination)
-		}
-		attri.next.addEventListener("click", methods.nextPage);
-		attri.back.addEventListener("click", methods.backPage);
-		methods.interval();
-	},
-	pagination: function (item) {
-        methods.resetInterval();
-        attri.pos = item.target.parentNode.getAttribute("item") - 1;
-		attri.container.style.left = - attri.pos * 100 + "%";
-        methods.setPaginationIndicator(attri.pos);
-        attri.container.style.transition = ".7s left ease-in-out";
+    /**
+     * Metodos
+     * */
+    initSlide: function () {
+        /**
+         * Agrega el evento clic a cada indicador del paginado
+         * */
+        for (var i = 0; i < Slide.pagination.length; i++) {
+            /**
+             * Cuando se hace clic a un indicador del paginado, va a esa imagen*/
+            Slide.pagination[i].addEventListener("click", Slide.initPagination)
+        }
+        /**
+         * Evento clic a cada flecha de navegacion
+         * */
+        Slide.next.addEventListener("click", Slide.nextPage);
+        Slide.back.addEventListener("click", Slide.backPage);
+        /**
+         * Slide autimatico
+         * */
+        Slide.interval();
+    },
+    initPagination: function (item) {
+        /**
+         * Cuando se avanza o retrocede manualmente, se cancela el slide automatico, despues de 10seg de inactivdad, regresa el slide automatico
+         * */
+        Slide.resetInterval();
+        /**
+         * Se obtiene la posicion actual del slide
+         * Se hace el cambio con animacion incluida
+         * Se cambia el indicar del slide
+         * */
+        Slide.pos = item.target.parentNode.getAttribute("item") - 1;
+        Slide.container.style.left = - Slide.pos * 100 + "%";
+        Slide.setPaginationIndicator(Slide.pos);
+        Slide.container.style.transition = ".7s left ease-in-out";
     },
     nextPage: function () {
-        methods.resetInterval();
+        /**
+         * Cuando se avanza o retrocede manualmente, se cancela el slide automatico, despues de 10seg de inactivdad, regresa el slide automatico
+         * */
+        Slide.resetInterval();
 
-	    if (attri.pos === attri.items.length - 1) {
-	        attri.pos = 0;
+        /**
+         * Validacion para que cuando este en la ultima imagen, regrese a la primera
+         * */
+        if (Slide.pos === Slide.items.length - 1) {
+            Slide.pos = 0;
         } else {
-            attri.pos ++;
+            Slide.pos ++;
         }
 
-        attri.container.style.left = attri.pos * -100 + '%';
-        methods.setPaginationIndicator(attri.pos);
-        attri.container.style.transition = ".7s left ease-in-out";
+        /**
+         * Se obtiene la posicion actual del slide
+         * Se hace el cambio con animacion incluida
+         * Se cambia el indicar del slide
+         * */
+        Slide.container.style.left = Slide.pos * -100 + '%';
+        Slide.setPaginationIndicator(Slide.pos);
+        Slide.container.style.transition = ".7s left ease-in-out";
     },
     backPage: function () {
-        methods.resetInterval();
+        /**
+         * Cuando se avanza o retrocede manualmente, se cancela el slide automatico, despues de 10seg de inactivdad, regresa el slide automatico
+         * */
+        Slide.resetInterval();
 
-        if (attri.pos === 0) {
-            attri.pos = attri.items.length - 1;
+        /**
+         * Validacion para que cuando este en la primer imagen, regrese a la ultima
+         * */
+        if (Slide.pos === 0) {
+            Slide.pos = Slide.items.length - 1;
         } else {
-            attri.pos --;
+            Slide.pos --;
         }
 
-        attri.container.style.left = attri.pos * -100 + '%';
-        methods.setPaginationIndicator(attri.pos);
-        attri.container.style.transition = ".7s left ease-in-out";
+        /**
+         * Se obtiene la posicion actual del slide
+         * Se hace el cambio con animacion incluida
+         * Se cambia el indicar del slide
+         * */
+        Slide.container.style.left = Slide.pos * -100 + '%';
+        Slide.setPaginationIndicator(Slide.pos);
+        Slide.container.style.transition = ".7s left ease-in-out";
     },
     interval: function () {
-        attri.interval = setInterval(function() {
-            if (attri.pos === attri.items.length - 1) {
-                attri.pos = 0;
+        /**
+         * Slide automatico
+         * Cambia la imagen cada 3 segundos
+         * */
+        Slide.intervalName = setInterval(function() {
+            if (Slide.pos === Slide.items.length - 1) {
+                Slide.pos = 0;
             } else {
-                attri.pos ++;
+                Slide.pos ++;
             }
 
-            attri.container.style.left = attri.pos * -100 + '%';
-            methods.setPaginationIndicator(attri.pos);
-            attri.container.style.transition = ".7s left ease-in-out";
+            Slide.container.style.left = Slide.pos * -100 + '%';
+            Slide.setPaginationIndicator(Slide.pos);
+            Slide.container.style.transition = ".7s left ease-in-out";
         }, 3000)
     },
     resetInterval: function () {
-        clearInterval(attri.interval);
+        /**
+         * Limpia el intervalo automatico
+         * */
+        clearInterval(Slide.intervalName);
 
+        /**
+         * Despues de 10 segundos, inicia el Slide automatico
+         * */
         setTimeout(function () {
-           methods.interval()
+            Slide.interval()
         }, 10000);
     },
     resetPagination: function () {
-        for (var i = 0; i < attri.pagination.length; i++) {
-            attri.pagination[i].style.opacity = '0.5';
-            attri.pagination[i].style.transition = ".7s opacity ease-in-out";
+        /**
+         * Cambia la opacidad de todos los indicadores
+         * */
+        for (var i = 0; i < Slide.pagination.length; i++) {
+            Slide.pagination[i].style.opacity = '0.5';
+            Slide.pagination[i].style.transition = ".7s opacity ease-in-out";
         }
     },
     setPaginationIndicator: function (index) {
-        methods.resetPagination();
-        attri.pagination[index].style.opacity = '1';
-        attri.pagination[index].style.transition = ".7s opacity ease-in-out";
+        /**
+         * Disminuye la opacidad de todos los indicadores
+         * */
+        Slide.resetPagination();
+        /**
+         * Aumenta la opacidad del indicador actual
+         * */
+        Slide.pagination[index].style.opacity = '1';
+        Slide.pagination[index].style.transition = ".7s opacity ease-in-out";
     }
 };
 
-methods.startSlide();
+Slide.initSlide();
